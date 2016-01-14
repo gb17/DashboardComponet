@@ -19,6 +19,7 @@
         android:background="@android:color/darker_gray">
 
         <TextView
+
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -42,11 +43,13 @@
         android:layout_height="wrap_content">
 
         <EditText
+            android:id="@+id/label1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <EditText
+            android:id="@+id/val1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -60,11 +63,13 @@
         android:layout_height="wrap_content">
 
         <EditText
+            android:id="@+id/label2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <EditText
+            android:id="@+id/val2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -78,12 +83,13 @@
         android:layout_height="wrap_content">
 
         <EditText
+            android:id="@+id/label3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-
         <EditText
+            android:id="@+id/val3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -98,11 +104,14 @@
         android:layout_height="wrap_content">
 
         <EditText
+            android:id="@+id/label4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
+
         <EditText
+            android:id="@+id/val4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
