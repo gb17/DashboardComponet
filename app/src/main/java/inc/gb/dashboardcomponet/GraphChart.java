@@ -575,6 +575,10 @@ public class GraphChart {
         mChart.setData(data);
         mChart.invalidate();
 
+
+        for (IBarDataSet set : mChart.getData().getDataSets())
+            set.setDrawValues(!set.isDrawValuesEnabled());
+
         Legend l = mChart.getLegend();
         l.setPosition(Legend.LegendPosition.BELOW_CHART_LEFT);
         l.setTypeface(tf);
