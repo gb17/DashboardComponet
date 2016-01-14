@@ -196,7 +196,7 @@ public class GraphChart {
         PieData data = new PieData(xVals, dataSet);
 
 
-      //  data.setValueFormatter(new PercentFormatter());
+        //  data.setValueFormatter(new PercentFormatter());
         data.setValueTextSize(11f);
         data.setValueTextColor(ChartLableColor);
         data.setValueTypeface(tf);
@@ -414,7 +414,7 @@ public class GraphChart {
         dataSets.add(set1);
 
         BarData data = new BarData(xVals, dataSets);
-       // data.setValueFormatter(new MyValueFormatter());
+        // data.setValueFormatter(new MyValueFormatter());
 
         stackedBarChart.setData(data);
 
@@ -453,7 +453,7 @@ public class GraphChart {
         mChart.setDrawGridBackground(false);
         // mChart.setDrawYLabels(false);
 
-     Typeface   mTf = Typeface.createFromAsset(mContext.getAssets(), "OpenSans-Regular.ttf");
+        Typeface mTf = Typeface.createFromAsset(mContext.getAssets(), "OpenSans-Regular.ttf");
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -461,13 +461,13 @@ public class GraphChart {
         xAxis.setDrawGridLines(false);
         xAxis.setSpaceBetweenLabels(2);
 
-    //    YAxisValueFormatter custom = new MyYAxisValueFormatter();
+        //    YAxisValueFormatter custom = new MyYAxisValueFormatter();
 
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.setTypeface(mTf);
         leftAxis.setDrawGridLines(false);
         leftAxis.setLabelCount(8, false);
-   //     leftAxis.setValueFormatter(custom);
+        //     leftAxis.setValueFormatter(custom);
         leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
         leftAxis.setSpaceTop(15f);
 
@@ -476,7 +476,7 @@ public class GraphChart {
         rightAxis.setTypeface(mTf);
         rightAxis.setLabelCount(3, false);
         rightAxis.setDrawLabels(false);
-    //    rightAxis.setValueFormatter(custom);
+        //    rightAxis.setValueFormatter(custom);
         rightAxis.setSpaceTop(15f);
 
         Legend l = mChart.getLegend();
