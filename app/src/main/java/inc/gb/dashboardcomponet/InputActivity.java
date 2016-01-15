@@ -378,6 +378,4 @@ public class InputActivity extends Activity {
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
-
-
 }
