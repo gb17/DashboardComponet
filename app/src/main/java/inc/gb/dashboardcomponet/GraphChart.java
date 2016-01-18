@@ -228,12 +228,9 @@ public class GraphChart {
         l.setTextColor(LegendTextColor);
         l.setXEntrySpace(7f);
         l.setYEntrySpace(0f);
-        l.setYOffset(0f);
-
+        l.setYOffset(10f);
 
         return pieView;
-
-
     }
 
 
@@ -332,7 +329,8 @@ public class GraphChart {
 
     }
 
-    public View getStackBarChart(String Heading, String[] xLegneds, String[] xLables, float[][] dataset, int[] StackColors) {
+    //String [][] where no. of col is number competitor and no .of rows no xvalues
+    public View getStackBarChart(String Heading, String[] xLegneds, String[] xLables, String[][] dataSet, int[] StackColors) {
 
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View stackedBarview = inflater.inflate(R.layout.graph_layout_stackbar, null);
@@ -390,18 +388,16 @@ public class GraphChart {
         for (int i = 0; i < xLables.length; i++) {
             xVals.add(xLables[i]);
         }
-//float [][] where no. of col is number competitor and no .of rows no xvalues
-        float[][] dataSet = {{200, 400, 300}, {300, 900, 500}, {400, 800, 700}, {500, 900, 100}};
 
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 
 
         for (int i = 0; i < xLables.length; i++) {
-            List<Float> list = new ArrayList<Float>();
+            List<String> list = new ArrayList<String>();
             for (int i1 = 0; i1 < dataSet[i].length; i1++)
                 list.add(dataSet[i][i1]);
 
-            float[] arr = convertIntegers(list);
+            float[] arr = convertString(list);
 
             yVals1.add(new BarEntry(arr, i));
         }
@@ -513,13 +509,15 @@ public class GraphChart {
     }
 
 
-    public View getMultiBarChart(String[] xValues, int[] colorArray, String[] competitors, int[][] mainData) {
+    public View getMultiBarChart(String heading, String[] xValues, int[] colorArray, String[] competitors, String[][] mainData) {
         //2-D array no of column has to be number of competitor and no of rows should be equal to no of x values
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.custom_multibarchart, null);
 
         mChart = (BarChart) view.findViewById(R.id.chart1);
         mChart.setDescription("");
+        TextView headingTextView = (TextView) view.findViewById(R.id.heading);
+        headingTextView.setText(heading);
 
 //        mChart.setDrawBorders(true);
 
@@ -557,7 +555,7 @@ public class GraphChart {
             ArrayList<BarEntry> yValues = new ArrayList<BarEntry>();
 
             for (int i = 0; i < xValues.length; i++) {
-                yValues.add(new BarEntry(mainData[i][values], i));
+                yValues.add(new BarEntry(Float.parseFloat(mainData[i][values]), i));
             }
             set1 = new BarDataSet(yValues, competitors[values]);
             set1.setColor(colorArray[values]);
@@ -606,6 +604,15 @@ public class GraphChart {
         Iterator<Float> iterator = integers.iterator();
         for (int i = 0; i < ret.length; i++) {
             ret[i] = iterator.next().floatValue();
+        }
+        return ret;
+    }
+
+    public float[] convertString(List<String> integers) {
+        float[] ret = new float[integers.size()];
+        Iterator<String> iterator = integers.iterator();
+        for (int i = 0; i < ret.length; i++) {
+            ret[i] = Float.parseFloat(iterator.next());
         }
         return ret;
     }

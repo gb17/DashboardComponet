@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -66,9 +67,17 @@ public class InputActivity extends Activity {
                 .getSystemService(InputActivity.this.WINDOW_SERVICE))
                 .getDefaultDisplay();
         dialog.setCancelable(false);
-        int width = display.getWidth();
-        int height = display.getHeight();
-        dialog.getWindow().setLayout(width / 3, height / 3);
+        int width = 0;
+        int height = 0;
+        if (isTablet(InputActivity.this)) {
+            width = display.getWidth() / 3;
+            height = (display.getHeight() * 2) / 5;
+        } else {
+            width = display.getWidth();
+            height = display.getHeight();
+        }
+
+        dialog.getWindow().setLayout(width, height);
         dialog.show();
         Button submit = (Button) dialog.findViewById(R.id.submit);
         spinner1 = (Spinner) dialog.findViewById(R.id.spinner1);
@@ -84,23 +93,51 @@ public class InputActivity extends Activity {
                 int countA = Integer.parseInt(spinner1.getSelectedItem().toString());
                 if (countA != 0) {
                     for (int i = 0; i < countA; i++)
-                        addPieChartInputDialog(linearLayout, countA);
+                        addChartInputDialog(linearLayout, countA, 1);
                 }
 
                 int countB = Integer.parseInt(spinner2.getSelectedItem().toString());
                 if (countB != 0) {
                     for (int i = 0; i < countB; i++)
-                        addLineChartInputDialog(linearLayout, countB);
+                        addChartInputDialog(linearLayout, countB, 2);
+                }
+
+                int countC = Integer.parseInt(spinner3.getSelectedItem().toString());
+                if (countC != 0) {
+                    for (int i = 0; i < countC; i++)
+                        addChartInputDialog(linearLayout, countC, 3);
+                }
+
+                int countD = Integer.parseInt(spinner4.getSelectedItem().toString());
+                if (countD != 0) {
+                    for (int i = 0; i < countD; i++)
+                        addChartInputDialog(linearLayout, countD, 4);
+                }
+
+                int countE = Integer.parseInt(spinner5.getSelectedItem().toString());
+                if (countE != 0) {
+                    for (int i = 0; i < countE; i++)
+                        addChartInputDialog(linearLayout, countE, 5);
                 }
             }
         });
     }
 
-    private void addLineChartInputDialog(LinearLayout linearLayout, int count) {
+    private void addChartInputDialog(LinearLayout linearLayout, int count, final int index) {
         LayoutInflater inflater = (LayoutInflater) InputActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final LinearLayout linear = (LinearLayout) inflater.inflate(R.layout.pie_char_input, null);
         TextView header = (TextView) linear.findViewById(R.id.header);
-        header.setText("LineChart DataSet");
+        if (index == 1)
+            header.setText("PieChart DataSet");
+        else if (index == 2)
+            header.setText("LineChart DataSet");
+        else if (index == 3)
+            header.setText("StackBarChart DataSet");
+        else if (index == 4)
+            header.setText("BarChart DataSet");
+        else if (index == 5)
+            header.setText("MultiBarChart DataSet");
+
         final LinearLayout linear2 = (LinearLayout) linear.findViewById(R.id.second);
         final Spinner addMore = (Spinner) linear.findViewById(R.id.addmore);
 
@@ -113,7 +150,10 @@ public class InputActivity extends Activity {
                 if (count > 0) {
                     LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     param.rightMargin = 20;
-                    linear2.addView(createGridforline(count + 1, count + 1), param);
+                    if (index == 1 || index == 4)
+                        linear2.addView(createGrid(count), param);
+                    else if (index == 2 || index == 3 || index == 5)
+                        linear2.addView(createGridforline(count + 1, count + 1), param);
                 }
             }
 
@@ -122,35 +162,7 @@ public class InputActivity extends Activity {
             }
         });
 
-        linear.setId(200 + count);
-        linearLayout.addView(linear);
-    }
-
-    private void addPieChartInputDialog(LinearLayout linearLayout, int count) {
-        LayoutInflater inflater = (LayoutInflater) InputActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final LinearLayout linear = (LinearLayout) inflater.inflate(R.layout.pie_char_input, null);
-        final LinearLayout linear2 = (LinearLayout) linear.findViewById(R.id.second);
-        final Spinner addMore = (Spinner) linear.findViewById(R.id.addmore);
-
-        addMore.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                int count = Integer.parseInt(addMore.getSelectedItem().toString());
-                linear2.removeAllViews();
-                if (count > 0) {
-                    LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    param.rightMargin = 20;
-                    linear2.addView(createGrid(count), param);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        linear.setId(100 + count);
+        linear.setId((100 * index) + count);
         linearLayout.addView(linear);
     }
 
@@ -160,6 +172,8 @@ public class InputActivity extends Activity {
         public void onClick(View view) {
             int count = linearLayout.getChildCount();
             if (count > 0) {
+                InputMethodManager manager = (InputMethodManager) InputActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 main_layout.removeAllViews();
                 TableRow tr = null;
                 int divide = 1;
@@ -182,19 +196,19 @@ public class InputActivity extends Activity {
 
     private void addViewsBasedOnId(int id, LinearLayout linearLayout, TableRow tr) {
         if (isBetween(id, 100, 200)) {
-            addPieChart(linearLayout, tr);
+            addPieChart(linearLayout, tr, 1);
         } else if (isBetween(id, 200, 300)) {
-            addLineChart(linearLayout, tr);
+            addLineStackChart(linearLayout, tr, 2);
         } else if (isBetween(id, 300, 400)) {
-
+            addLineStackChart(linearLayout, tr, 3);
         } else if (isBetween(id, 400, 500)) {
-
+            addPieChart(linearLayout, tr, 4);
         } else if (isBetween(id, 500, 600)) {
-
+            addLineStackChart(linearLayout, tr, 5);
         }
     }
 
-    public void addLineChart(LinearLayout linearLayout, TableRow tablerow) {
+    public void addLineStackChart(LinearLayout linearLayout, TableRow tablerow, int index) {
         TableLayout table = (TableLayout) ((LinearLayout) ((ScrollView) ((RelativeLayout) ((LinearLayout) linearLayout.getChildAt(3)).getChildAt(0)).getChildAt(0)).getChildAt(0)).getChildAt(0);
         ArrayList<String> arrXValues = new ArrayList<>();
         ArrayList<String> dataLabel = new ArrayList<>();
@@ -226,15 +240,37 @@ public class InputActivity extends Activity {
                 count++;
             }
         }
+        View pieChart = null;
+        if (index == 2)
+            pieChart = graphChart.getLineChart("Line Chart", str1, str3, str2, mColors);
+        else if (index == 3) {
+            int[] colors = new int[str2.length];
+            for (int i = 0; i < colors.length; i++)
+                colors[i] = mColors[i];
 
-        View pieChart = graphChart.getLineChart("Line Chart", str1, str3, str2, mColors);
-        TableRow.LayoutParams param = new TableRow.LayoutParams(350, 350);
+            pieChart = graphChart.getStackBarChart("StackBar Chart", str1, str2, str3, colors);
+        } else if (index == 5) {
+            int[] colors = new int[str2.length];
+            for (int i = 0; i < colors.length; i++)
+                colors[i] = mColors[i];
+
+            pieChart = graphChart.getMultiBarChart("MultiBar Chart", str1, colors, str2, str3);
+        }
+
+        pieChart.setBackgroundResource(R.drawable.bg_rounded);
+        TableRow.LayoutParams param = null;
+        if (isTablet(InputActivity.this))
+            param = new TableRow.LayoutParams(340, 340);
+        else
+            param = new TableRow.LayoutParams(550, 550);
+
         param.rightMargin = 20;
+        param.topMargin = 20;
 
         tablerow.addView(pieChart, param);
     }
 
-    public void addPieChart(LinearLayout linearLayout, TableRow tablerow) {
+    public void addPieChart(LinearLayout linearLayout, TableRow tablerow, int index) {
         TableLayout table = (TableLayout) ((LinearLayout) ((ScrollView) ((RelativeLayout) ((LinearLayout) linearLayout.getChildAt(3)).getChildAt(0)).getChildAt(0)).getChildAt(0)).getChildAt(0);
         ArrayList<String> arr1 = new ArrayList<>();
         ArrayList<String> arr2 = new ArrayList<>();
@@ -246,9 +282,23 @@ public class InputActivity extends Activity {
         }
         String[] str1 = convertString(arr1);
         String[] str2 = convertString(arr2);
-        View pieChart = graphChart.getPieChart("Dr Assist", str1, true, str2, true, false, Color.BLACK, Color.BLACK, Legend.LegendPosition.BELOW_CHART_CENTER);
-        TableRow.LayoutParams param = new TableRow.LayoutParams(350, 350);
+        View pieChart = null;
+        if (index == 1)
+            pieChart = graphChart.getPieChart("Dr Assist", str1, true, str2, true, false, Color.BLACK, Color.BLACK, Legend.LegendPosition.BELOW_CHART_CENTER);
+        if (index == 4) {
+            pieChart = graphChart.getBarChart(str1, str2);
+        }
+
+        pieChart.setBackgroundResource(R.drawable.bg_rounded);
+        TableRow.LayoutParams param = null;
+        if (isTablet(InputActivity.this))
+
+            param = new TableRow.LayoutParams(340, 340);
+        else
+            param = new TableRow.LayoutParams(550, 550);
+
         param.rightMargin = 20;
+        param.topMargin = 20;
         tablerow.addView(pieChart, param);
     }
 
